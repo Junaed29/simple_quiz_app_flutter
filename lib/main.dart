@@ -27,6 +27,38 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Widget> scoreKeeperList = [];
+  List<String> questionList = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.'
+  ];
+
+  List<bool> questionAnswer = [false, true, true];
+
+  int currentQuestion = 0;
+
+  void checkAnswerAndChangeQuestion(bool givenAnswer) {
+    setState(() {
+      if (questionAnswer[currentQuestion] == givenAnswer) {
+        scoreKeeperList.add(const Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeperList.add(const Icon(
+          Icons.close,
+          color: Colors.red,
+        ));
+      }
+      if (currentQuestion == 2) {
+        currentQuestion = 0;
+      } else {
+        currentQuestion++;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,12 +68,12 @@ class _QuizPageState extends State<QuizPage> {
         Expanded(
           flex: 5,
           child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                questionList[currentQuestion],
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25.0,
                   color: Colors.white,
                 ),
@@ -51,11 +83,11 @@ class _QuizPageState extends State<QuizPage> {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
+            padding: const EdgeInsets.all(15.0),
+            child: MaterialButton(
               textColor: Colors.white,
               color: Colors.green,
-              child: Text(
+              child: const Text(
                 'True',
                 style: TextStyle(
                   color: Colors.white,
@@ -63,17 +95,17 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                checkAnswerAndChangeQuestion(true);
               },
             ),
           ),
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
+            padding: const EdgeInsets.all(15.0),
+            child: MaterialButton(
               color: Colors.red,
-              child: Text(
+              child: const Text(
                 'False',
                 style: TextStyle(
                   fontSize: 20.0,
@@ -81,12 +113,12 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                checkAnswerAndChangeQuestion(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(children: scoreKeeperList)
       ],
     );
   }
